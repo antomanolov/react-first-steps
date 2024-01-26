@@ -1,3 +1,7 @@
-export default function Button() {
-    return <button className="btn">Reset</button>;
+export default function Button({ onResetAll }) {
+    return (
+        <button className="btn" onClick={onResetAll}>
+            Reset
+        </button>
+    );
 }
