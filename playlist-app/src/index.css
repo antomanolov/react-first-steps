@@ -72,6 +72,38 @@ body {
     border-radius: 50%;
 }
 
+.add-album {
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+    margin-top: 2rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.add-album h1 {
+    margin: 1rem 0;
+}
+
+.album-li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.album-li input,
+label {
+    margin-top: 5px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+form h3 {
+    margin-top: 1rem;
+}
+.songs {
+    margin-top: 1rem;
+}
+
 .users {
     display: inline-flex;
     flex-direction: column;
