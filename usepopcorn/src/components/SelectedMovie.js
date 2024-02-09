@@ -42,6 +42,22 @@ export default function SelectedMovie({
         onAddWatched(newMovie);
         onCloseMovie();
     }
+
+    useEffect(
+        function () {
+            function callBack(e) {
+                if (e.code === "Escape") {
+                    onCloseMovie();
+                    console.log("Closing");
+                }
+            }
+            document.addEventListener("keydown", callBack);
+            return function () {
+                document.removeEventListener("keydown", callBack);
+            };
+        },
+        [onCloseMovie]
+    );
     useEffect(
         function () {
             setIsLoading(true);
