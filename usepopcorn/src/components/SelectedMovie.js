@@ -58,6 +58,17 @@ export default function SelectedMovie({
         [selectedId]
     );
 
+    useEffect(
+        function () {
+            if (!title) return;
+            document.title = `MOVIE | ${title}`;
+            return function () {
+                document.title = "usePopcorn";
+            };
+        },
+        [title]
+    );
+
     if (isWatched)
         watchedMovie = watchedMovies.filter(
             (movie) => movie.imdbID === selectedId
