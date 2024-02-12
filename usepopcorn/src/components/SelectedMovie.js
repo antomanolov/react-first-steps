@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Loader from "./Loader.js";
 import StarRating from "../starRating.js";
+import { useKey } from "./useKey.js";
 const KEY = `c50aeeb7`;
 
 export default function SelectedMovie({
@@ -50,25 +51,26 @@ export default function SelectedMovie({
     useEffect(
         function () {
             if (userRating) countRef.current += 1;
-            console.log(countRef);
         },
         [userRating]
     );
+    useKey("Escape", onCloseMovie);
 
-    useEffect(
-        function () {
-            function callBack(e) {
-                if (e.code === "Escape") {
-                    onCloseMovie();
-                }
-            }
-            document.addEventListener("keydown", callBack);
-            return function () {
-                document.removeEventListener("keydown", callBack);
-            };
-        },
-        [onCloseMovie]
-    );
+    // useEffect(
+    //     function () {
+    //         function callBack(e) {
+    //             if (e.code === "Escape") {
+    //                 onCloseMovie();
+    //             }
+    //         }
+    //         document.addEventListener("keydown", callBack);
+    //         return function () {
+    //             document.removeEventListener("keydown", callBack);
+    //         };
+    //     },
+    //     [onCloseMovie]
+    // );
+
     useEffect(
         function () {
             setIsLoading(true);
