@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Loader from "./Loader.js";
 import StarRating from "../starRating.js";
 const KEY = `c50aeeb7`;
@@ -14,6 +14,8 @@ export default function SelectedMovie({
     const [userRating, setUserRating] = useState("");
     const watchedIds = watchedMovies.map((el) => el.imdbID);
     const isWatched = watchedIds.includes(selectedId);
+
+    const countRef = useRef(0);
 
     let watchedMovie = "";
     // this is good way of destructuring! read more about it if it is needed
@@ -39,6 +41,7 @@ export default function SelectedMovie({
             imdbRating: Number(imdbRating),
             runtime: Number(runtime.split(" ").at(0)),
             userRating,
+            countRatingDecisions: countRef.current,
         };
         onAddWatched(newMovie);
         onCloseMovie();
@@ -46,10 +49,17 @@ export default function SelectedMovie({
 
     useEffect(
         function () {
+            if (userRating) countRef.current += 1;
+            console.log(countRef);
+        },
+        [userRating]
+    );
+
+    useEffect(
+        function () {
             function callBack(e) {
                 if (e.code === "Escape") {
                     onCloseMovie();
-                    console.log("Closing");
                 }
             }
             document.addEventListener("keydown", callBack);
