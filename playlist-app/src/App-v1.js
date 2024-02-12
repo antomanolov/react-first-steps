@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 const initialUsers = [
     { name: "Anton", albums: [], avatar: "", likedSongs: 0, id: 0 },
-    { name: "Mars", albums: [], avatar: "", likedSongs: 0, id: 0 },
 ];
 
 export default function App() {
@@ -11,7 +10,6 @@ export default function App() {
         const storedValue = localStorage.getItem("albums");
         return storedValue ? JSON.parse(storedValue) : [];
     });
-    const [currentUser, setCurrentUser] = useState("");
 
     useEffect(
         function () {
@@ -20,35 +18,19 @@ export default function App() {
         [likedSongs]
     );
 
-    function onClickButton(name) {
-        setCurrentUser(name);
-        if ((currentUser !== name) & showAlbums) {
-            return;
-        }
-        setShowAlbums((prevState) => !prevState);
+    function onClickButton() {
+        setShowAlbums((prev) => !prev);
     }
-
     return (
         <div className="container">
             <Header />
             <div className="inner-container">
                 <div className="flex">
-                    <Users>
-                        {initialUsers.map((user) => (
-                            <User
-                                key={user.id}
-                                user={user}
-                                onClick={onClickButton}
-                                likedSongs={likedSongs}
-                            />
-                        ))}
-                    </Users>
+                    <Users onClick={onClickButton} lickedSongs={likedSongs} />
                     {showAlbums ? (
                         <AddAlbumForm
                             setAlbums={setLikedSongs}
                             albums={likedSongs}
-                            currentUser={currentUser}
-                            closeForm={setShowAlbums}
                         />
                     ) : null}
                 </div>
@@ -70,28 +52,22 @@ function Button({ onClick, children }) {
     );
 }
 
-function Users({ children }) {
-    return <ul className="users">{children}</ul>;
-}
-
-function User({ user, onClick, likedSongs }) {
-    // this is used to flat the songs on one array from the big array!
-    const totalSongs = likedSongs.flatMap((album) =>
-        album.addedBy === user.name ? album.songs : ""
-    );
-    const AllLikedSongs = totalSongs.filter((song) => song.liked);
-    const numberOfLikes = AllLikedSongs.length;
-
+function Users({ onClick, lickedSongs }) {
     return (
-        <li className="user">
-            <h3>🎶 {user.name}</h3>
-            <p>Liked songs: {numberOfLikes > 0 ? numberOfLikes : 0}</p>
-            <Button onClick={() => onClick(user.name)}>Add New Album</Button>
-        </li>
+        <ul className="users">
+            {initialUsers.map((user) => (
+                <User
+                    key={user.id}
+                    user={user}
+                    onClick={onClick}
+                    likedSongs={lickedSongs}
+                />
+            ))}
+        </ul>
     );
 }
 
-function AddAlbumForm({ setAlbums, currentUser, closeForm }) {
+function AddAlbumForm({ albums, setAlbums }) {
     const [albumName, setAlbumName] = useState("");
     const [albumCover, setAlbumCover] = useState("");
     const [albumArtist, setAlbumArtist] = useState("");
@@ -111,7 +87,6 @@ function AddAlbumForm({ setAlbums, currentUser, closeForm }) {
             songs: [song1, song2, song3, song4, song5, song6],
             year: year,
             img: albumCover,
-            addedBy: currentUser,
         };
         if (
             albumArtist &&
@@ -124,10 +99,8 @@ function AddAlbumForm({ setAlbums, currentUser, closeForm }) {
             song4 &&
             song5 &&
             song6
-        ) {
+        )
             setAlbums((prevAlbums) => [...prevAlbums, newAlbum]);
-            closeForm(false);
-        }
     }
 
     return (
@@ -265,6 +238,21 @@ function AddAlbumForm({ setAlbums, currentUser, closeForm }) {
     );
 }
 
+function User({ user, onClick, likedSongs }) {
+    // this is used to flat the songs on one array from the big array!
+    const totalSongs = likedSongs.flatMap((album) => album.songs);
+    const AllLikedSongs = totalSongs.filter((song) => song.liked);
+    const numberOfLikes = AllLikedSongs.length;
+
+    return (
+        <li className="user">
+            <h3>🎶 {user.name}</h3>
+            <p>Liked songs: {numberOfLikes > 0 ? numberOfLikes : 0}</p>
+            <Button onClick={onClick}>Add New Album</Button>
+        </li>
+    );
+}
+
 function Albums({ likedSongs, setLikedSongs }) {
     return (
         <ul className="albums">
@@ -296,7 +284,6 @@ function Album({ album, likedSongs, setLikedSongs }) {
                     setLikedSongs={setLikedSongs}
                 />
             ))}
-            <h2 className="added-by">Added by {album.addedBy}</h2>
         </li>
     );
 }
