@@ -17,6 +17,7 @@ export default function SelectedMovie({
 
     let watchedMovie = "";
     // this is good way of destructuring! read more about it if it is needed
+
     const {
         Title: title,
         Year: year,

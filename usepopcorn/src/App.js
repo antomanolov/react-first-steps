@@ -17,7 +17,14 @@ const KEY = `c50aeeb7`;
 
 export default function App() {
     const [query, setQuery] = useState("");
-    const [watched, setWatched] = useState([]);
+    // const [watched, setWatched] = useState([]);
+
+    // we can use the initial state to pass the
+    // local storage in the state of watched always pass it with function
+    const [watched, setWatched] = useState(function () {
+        const storedValue = localStorage.getItem("watched");
+        return JSON.parse(storedValue);
+    });
     const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -38,6 +45,13 @@ export default function App() {
     function handleDeleteWatched(id) {
         setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
     }
+
+    useEffect(
+        function () {
+            localStorage.setItem("watched", JSON.stringify(watched));
+        },
+        [watched]
+    );
 
     useEffect(
         function () {
