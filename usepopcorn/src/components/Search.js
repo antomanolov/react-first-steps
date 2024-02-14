@@ -8,6 +8,7 @@ export default function Search({ query, setQuery }) {
         inputEl.current.focus();
         setQuery("");
     }
+    // closure!
     useKey("Enter", callback);
 
     return (
